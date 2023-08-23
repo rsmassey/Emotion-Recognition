@@ -1,12 +1,12 @@
 import streamlit as st
 import numpy as np
-import keras
+import tensorflow as tf
 from PIL import Image, ImageOps
 
 # Load model
 @st.cache(allow_output_mutation=True)
 def load_model():
-    model = keras.models.load_model('emotion_model.h5')
+    model = tf.keras.models.load_model('emotion_model.h5')  # Use tf.keras.models instead of keras.models
     return model
 
 model = load_model()
@@ -36,6 +36,5 @@ if uploaded_file is not None:
     image = Image.open(uploaded_file)
     prediction = predict(image)
 
-    # You might need to modify this to match your model's classes
     emotion_classes = ['Angry', 'Disgust', 'Fear', 'Happy', 'Sad', 'Surprise', 'Neutral']
-    st.write(f"Predicted Emotion: {emotion_classes[prediction]}")
+    st.write(f"Predicted Emotion: {emotion_classes[np.argmax(prediction)]}")
